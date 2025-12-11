@@ -63,6 +63,8 @@ class HabitCard extends StatelessWidget {
                     children: [
                       Text(
                         habit.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -73,7 +75,7 @@ class HabitCard extends StatelessWidget {
                           decorationColor: AppTheme.textSecondary,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 8), // Increased spacing
                       _buildStreakBadge(),
                     ],
                   ),
@@ -150,12 +152,15 @@ class HabitCard extends StatelessWidget {
             style: TextStyle(fontSize: 12),
           ),
           const SizedBox(width: 4),
-          Text(
-            '$streak hari berturut-turut',
-            style: TextStyle(
-              fontSize: 12,
-              color: AppTheme.streakColor,
-              fontWeight: FontWeight.w600,
+          Flexible(
+            child: Text(
+              '$streak hari berturut-turut',
+              style: TextStyle(
+                fontSize: 12,
+                color: AppTheme.streakColor,
+                fontWeight: FontWeight.w600,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

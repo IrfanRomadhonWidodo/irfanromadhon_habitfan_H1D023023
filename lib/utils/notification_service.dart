@@ -41,7 +41,18 @@ class NotificationService {
       initSettings,
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
-
+    
+    // Request permissions right after init for Android < 13 if needed, 
+    // or just rely on the runtime request when enabling settings.
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+          _notifications.resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
+      if (androidImplementation != null) {
+        await androidImplementation.requestNotificationsPermission();
+      }
+    }
+    
     _isInitialized = true;
   }
 
@@ -52,17 +63,18 @@ class NotificationService {
     }
   }
 
-  /// Request notification permissions (for iOS and Android 13+)
+  /// Request notification permissions
   Future<bool> requestPermissions() async {
     final android = _notifications.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
     
+    // For Android 13+ (API 33+)
     if (android != null) {
       final granted = await android.requestNotificationsPermission();
       return granted ?? false;
     }
 
-    return true;
+    return true; // Auto-granted on Android < 13
   }
 
   /// Schedule a daily reminder for a habit

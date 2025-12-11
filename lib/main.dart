@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
 import 'data/local/habit_local_service.dart';
 import 'ui/viewmodels/habit_viewmodel.dart';
-import 'ui/pages/home_page.dart';
+import 'ui/viewmodels/settings_viewmodel.dart';
+import 'ui/pages/main_scaffold.dart';
 import 'utils/notification_service.dart';
 
 void main() async {
@@ -27,13 +28,22 @@ class HabitFanApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HabitViewModel(),
-      child: MaterialApp(
-        title: 'HabitFan',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
-        home: const HomePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HabitViewModel()),
+        ChangeNotifierProvider(create: (_) => SettingsViewModel()),
+      ],
+      child: Consumer<SettingsViewModel>(
+        builder: (context, settingsViewModel, child) {
+          return MaterialApp(
+            title: 'HabitFan',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: settingsViewModel.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            home: const MainScaffold(),
+          );
+        },
       ),
     );
   }

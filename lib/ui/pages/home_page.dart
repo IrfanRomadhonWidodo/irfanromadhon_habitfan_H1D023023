@@ -4,7 +4,7 @@ import '../../core/theme/app_theme.dart';
 import '../viewmodels/habit_viewmodel.dart';
 import '../widgets/habit_card.dart';
 import 'add_habit_page.dart';
-import 'weekly_stats_page.dart';
+
 
 /// Home page displaying list of habits with daily checklist
 class HomePage extends StatefulWidget {
@@ -68,18 +68,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       actions: [
-        IconButton(
-          onPressed: () => _navigateToStats(),
-          icon: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppTheme.surfaceColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.bar_chart_rounded),
-          ),
-          tooltip: 'Statistik Mingguan',
-        ),
         const SizedBox(width: 8),
       ],
     );
@@ -299,12 +287,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _navigateToStats() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const WeeklyStatsPage(),
-      ),
-    );
-  }
+
 }

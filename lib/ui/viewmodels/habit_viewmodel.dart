@@ -242,6 +242,22 @@ class HabitViewModel extends ChangeNotifier {
     await _notificationService.cancelHabitReminder(habit.id.hashCode);
   }
 
+  /// Reschedule all enabled habit reminders
+  Future<void> rescheduleAllReminders() async {
+    for (final habit in _habits) {
+      if (habit.reminderEnabled &&
+          habit.reminderHour != null &&
+          habit.reminderMinute != null) {
+        await _scheduleReminder(habit);
+      }
+    }
+  }
+
+  /// Cancel all habit reminders
+  Future<void> cancelAllReminders() async {
+    await _notificationService.cancelAllReminders();
+  }
+
   /// Clear error
   void clearError() {
     _error = null;
