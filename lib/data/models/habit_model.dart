@@ -45,6 +45,9 @@ class HabitModel extends HiveObject {
         d.year == date.year && d.month == date.month && d.day == date.day);
   }
 
+  /// Check if habit is completed today
+  bool get isCompletedToday => isCompletedOn(DateTime.now());
+
   /// Toggle completion status for a specific date
   void toggleCompletion(DateTime date) {
     final normalizedDate = DateTime(date.year, date.month, date.day);

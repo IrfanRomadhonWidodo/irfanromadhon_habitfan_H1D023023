@@ -84,12 +84,13 @@ class NotificationService {
     required String habitIcon,
     required int hour,
     required int minute,
+    bool forceNextDay = false,
   }) async {
     await _notifications.zonedSchedule(
       id,
       '$habitIcon $habitName',
       'Jangan lupa untuk menyelesaikan kebiasaan ini hari ini!',
-      _nextInstanceOfTime(hour, minute),
+      _nextInstanceOfTime(hour, minute, forceNextDay: forceNextDay),
       NotificationDetails(
         android: AndroidNotificationDetails(
           'habit_reminders',
@@ -125,7 +126,7 @@ class NotificationService {
   }
 
   /// Get the next instance of a specific time
-  tz.TZDateTime _nextInstanceOfTime(int hour, int minute) {
+  tz.TZDateTime _nextInstanceOfTime(int hour, int minute, {bool forceNextDay = false}) {
     final now = tz.TZDateTime.now(tz.local);
     var scheduledDate = tz.TZDateTime(
       tz.local,
@@ -136,7 +137,7 @@ class NotificationService {
       minute,
     );
 
-    if (scheduledDate.isBefore(now)) {
+    if (scheduledDate.isBefore(now) || forceNextDay) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
 

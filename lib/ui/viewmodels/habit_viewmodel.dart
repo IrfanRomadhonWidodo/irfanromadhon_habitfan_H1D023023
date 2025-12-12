@@ -141,6 +141,25 @@ class HabitViewModel extends ChangeNotifier {
       habit.toggleCompletion(DateTime.now());
       await habit.save();
 
+      // Smart Notification Logic:
+      // If completed today: Reschedule for tomorrow (skip today)
+      // If uncompleted today: Reschedule for today (if time hasn't passed)
+      if (habit.reminderEnabled && 
+          habit.reminderHour != null && 
+          habit.reminderMinute != null) {
+        
+        await _notificationService.cancelHabitReminder(habit.id.hashCode);
+        
+        await _notificationService.scheduleHabitReminder(
+          id: habit.id.hashCode,
+          habitName: habit.name,
+          habitIcon: habit.icon,
+          hour: habit.reminderHour!,
+          minute: habit.reminderMinute!,
+          forceNextDay: habit.isCompletedToday, 
+        );
+      }
+
       notifyListeners();
     } catch (e) {
       _error = 'Gagal mengupdate progress: $e';
